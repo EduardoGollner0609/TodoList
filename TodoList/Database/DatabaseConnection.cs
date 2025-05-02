@@ -11,6 +11,5 @@ namespace TodoList.Database
     {
         private const string connectionString =
         "Server=EDUARDO;Database=todolist;Trusted_Connection=True;TrustServerCertificate=True;";
-
     }
 }
