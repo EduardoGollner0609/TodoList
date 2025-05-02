@@ -27,15 +27,5 @@ namespace TodoList.Entities
         {
             Id = id;
         }
-
-        public override string ToString()
-        {
-            return $"ID: {Id} | " +
-                $"Titulo: {Title} | " +
-                $"Descrição: {Description} | " +
-                $"Prazo: {Date.ToString("dd/MM/yyyy")} | " +
-                $"Importância: {Importance} | " +
-                $"Status: {Status}";
-        }
     }
 }
