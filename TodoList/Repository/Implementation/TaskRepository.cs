@@ -78,7 +78,7 @@ namespace TodoList.Repository.Implementation
                 }
                 catch (Exception e)
                 {
-                    throw new DatabaseException("Erro ao buscar usuário");
+                    throw new DatabaseException("Erro ao buscar tarefas");
                 }
                 finally
                 {
@@ -90,7 +90,33 @@ namespace TodoList.Repository.Implementation
 
         public List<Task> FindAll()
         {
-            throw new NotImplementedException();
+            List<Task> tasks = new List<Task>();
+
+            string query = "SELECT * FROM tb_tasks";
+
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
+            {
+                try
+                {
+                    _conn.Open();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        tasks.Add(InstantiateTask(reader));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new DatabaseException("Erro ao buscar tarefas");
+                }
+                finally
+                {
+                    DatabaseConnection.CloseConnection(_conn);
+                }
+                return tasks;
+            }
         }
 
 
