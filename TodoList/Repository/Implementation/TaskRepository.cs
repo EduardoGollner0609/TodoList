@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList.Database;
 using TodoList.Database.Exceptions;
+using TodoList.Entities;
 using TodoList.Entities.Enums;
 using Task = TodoList.Entities.Task;
 
@@ -122,7 +123,29 @@ namespace TodoList.Repository.Implementation
 
         public bool ExistsById(int id)
         {
-            throw new NotImplementedException();
+            string query = "SELECT COUNT(*) FROM tb_tasks WHERE id = @id";
+
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    _conn.Open();
+
+                    int count = (int) cmd.ExecuteScalar();
+
+                    return count > 0;
+                }
+                catch (Exception e)
+                {
+                    throw new DatabaseException("Erro ao buscar tarefas");
+                }
+                finally
+                {
+                    DatabaseConnection.CloseConnection(_conn);
+                }
+            }
         }
 
         public void Update(Task entity, int id)
