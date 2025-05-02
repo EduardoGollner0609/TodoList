@@ -181,7 +181,32 @@ namespace TodoList.Repository.Implementation
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            string query = "DELETE FROM tb_tasks WHERE id = @id";
+
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    _conn.Open();
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        throw new DatabaseException("Erro ao deletar tarefa: Nenhuma linha foi afetada!");
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new DatabaseException("Erro ao deletar tarefa: " + e.Message);
+                }
+                finally
+                {
+                    DatabaseConnection.CloseConnection(_conn);
+                }
+            }
         }
 
         public Task InstantiateTask(SqlDataReader reader)
