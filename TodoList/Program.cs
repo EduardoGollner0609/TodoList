@@ -1,4 +1,6 @@
-﻿namespace TodoList
+﻿using Microsoft.Data.SqlClient;
+
+namespace TodoList
 {
     internal class Program
     {
