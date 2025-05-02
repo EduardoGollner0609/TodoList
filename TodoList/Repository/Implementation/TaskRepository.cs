@@ -42,7 +42,7 @@ namespace TodoList.Repository.Implementation
 
                     if (rowsAffected == 0)
                     {
-                        throw new DatabaseException("Erro ao inserir tarefa! Nenhuma linha foi afetada!");
+                        throw new DatabaseException("Erro ao inserir tarefa: Nenhuma linha foi afetada!");
                     }
                 }
                 catch (Exception e)
@@ -79,7 +79,7 @@ namespace TodoList.Repository.Implementation
                 }
                 catch (Exception e)
                 {
-                    throw new DatabaseException("Erro ao buscar tarefas");
+                    throw new DatabaseException("Erro ao buscar tarefa: " + e.Message);
                 }
                 finally
                 {
@@ -110,7 +110,7 @@ namespace TodoList.Repository.Implementation
                 }
                 catch (Exception e)
                 {
-                    throw new DatabaseException("Erro ao buscar tarefas");
+                    throw new DatabaseException("Erro ao buscar tarefas: " + e.Message);
                 }
                 finally
                 {
@@ -133,13 +133,13 @@ namespace TodoList.Repository.Implementation
                 {
                     _conn.Open();
 
-                    int count = (int) cmd.ExecuteScalar();
+                    int count = (int)cmd.ExecuteScalar();
 
                     return count > 0;
                 }
                 catch (Exception e)
                 {
-                    throw new DatabaseException("Erro ao buscar tarefas");
+                    throw new DatabaseException("Erro ao buscar tarefa: " + e.Message);
                 }
                 finally
                 {
@@ -150,7 +150,33 @@ namespace TodoList.Repository.Implementation
 
         public void Update(Task entity, int id)
         {
-            throw new NotImplementedException();
+            string query = "UPDATE tb_tasks SET status = @status WHERE id = @id";
+
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
+            {
+                cmd.Parameters.AddWithValue("@status", (int)entity.Status);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    _conn.Open();
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        throw new DatabaseException("Erro ao atualizar tarefa: Nenhuma linha foi afetada!");
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new DatabaseException("Erro ao atualizar tarefa: " + e.Message);
+                }
+                finally
+                {
+                    DatabaseConnection.CloseConnection(_conn);
+                }
+            }
         }
 
         public void DeleteById(int id)
