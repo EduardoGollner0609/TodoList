@@ -14,11 +14,12 @@ namespace TodoList.Repository
         // Read
         T FindById(int id);
         List<T> FindAll();
+        bool ExistsById(int id);
 
         // Update
         void Update(T entity, int id);
 
         //Delete
-        void DleeteById(int id);
+        void DeleteById(int id);
     }
 }
