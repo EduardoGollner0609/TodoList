@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList.Database;
 using TodoList.Database.Exceptions;
+using TodoList.Entities.Enums;
 using Task = TodoList.Entities.Task;
 
 namespace TodoList.Repository.Implementation
@@ -56,7 +57,35 @@ namespace TodoList.Repository.Implementation
 
         public Task FindById(int id)
         {
-            throw new NotImplementedException();
+            Task task = null;
+
+            string query = "SELECT * FROM tb_tasks WHERE id = @id";
+
+            using (SqlCommand cmd = new SqlCommand(query, _conn))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    _conn.Open();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        task = InstantiateTask(reader);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new DatabaseException("Erro ao buscar usuário");
+                }
+                finally
+                {
+                    DatabaseConnection.CloseConnection(_conn);
+                }
+                return task;
+            }
         }
 
         public List<Task> FindAll()
@@ -78,6 +107,17 @@ namespace TodoList.Repository.Implementation
         public void DeleteById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public Task InstantiateTask(SqlDataReader reader)
+        {
+            return new(
+                reader.GetInt16(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                (Importance)reader.GetInt16(3),
+                reader.GetDateTime(4), (Status)
+                reader.GetInt16(5));
         }
     }
 }
