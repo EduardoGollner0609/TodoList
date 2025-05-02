@@ -1,0 +1,11 @@
+/* Comandos SQL para criação de tabela de tarefas */
+
+CREATE TABLE tb_tasks (
+id INT IDENTITY(1, 1) NOT NULL,
+title VARCHAR(100) NOT NULL,
+description VARCHAR(MAX) NOT NULL,
+importance INT NOT NULL,
+date DATE,
+status INT NOT NULL,
+PRIMARY KEY(id)
+);
