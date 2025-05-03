@@ -24,6 +24,15 @@ namespace TodoList.Dto
             Status = task.Status;
         }
 
+        public TaskDto(string title, string description, Importance importance, DateTime date, Status status)
+        {
+            Title = title;
+            Description = description;
+            Importance = importance;
+            Date = date;
+            Status = status;
+        }
+
         public override string ToString()
         {
             return $"ID: {Id} | " +

@@ -55,7 +55,7 @@ namespace TodoList.Services
 
         public void DeleteById(int id)
         {
-            if (_taskRepository.ExistsById(id))
+            if (!_taskRepository.ExistsById(id))
             {
                 throw new ResourceNotFoundException($"Tarefa do id {id} não foi encontrada!");
             }

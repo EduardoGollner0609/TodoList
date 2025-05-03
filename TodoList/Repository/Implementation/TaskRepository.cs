@@ -38,12 +38,8 @@ namespace TodoList.Repository.Implementation
                 {
                     _conn.Open();
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
-                    if (rowsAffected == 0)
-                    {
-                        throw new DatabaseException("Erro ao inserir tarefa: Nenhuma linha foi afetada!");
-                    }
                 }
                 catch (Exception e)
                 {
@@ -154,8 +150,8 @@ namespace TodoList.Repository.Implementation
 
             using (SqlCommand cmd = new SqlCommand(query, _conn))
             {
-                cmd.Parameters.AddWithValue("@status", (int)entity.Status);
                 cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@status", (int)entity.Status);
 
                 try
                 {
@@ -191,12 +187,8 @@ namespace TodoList.Repository.Implementation
                 {
                     _conn.Open();
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
-                    if (rowsAffected == 0)
-                    {
-                        throw new DatabaseException("Erro ao deletar tarefa: Nenhuma linha foi afetada!");
-                    }
                 }
                 catch (Exception e)
                 {
@@ -212,12 +204,12 @@ namespace TodoList.Repository.Implementation
         public Task InstantiateTask(SqlDataReader reader)
         {
             return new(
-                reader.GetInt16(0),
+                reader.GetInt32(0),
                 reader.GetString(1),
                 reader.GetString(2),
-                (Importance)reader.GetInt16(3),
-                reader.GetDateTime(4), (Status)
-                reader.GetInt16(5));
+                (Importance)reader.GetInt32(3),
+                reader.GetDateTime(4),
+                (Status)reader.GetInt32(5));
         }
     }
 }
