@@ -1,13 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Globalization;
-using TodoList.Database;
-using TodoList.Database.Exceptions;
+﻿using System.Globalization;
 using TodoList.Dto;
 using TodoList.Entities.Enums;
 using TodoList.Factory;
 using TodoList.Services;
-using TodoList.Services.Exceptions;
-using Task = TodoList.Entities.Task;
 
 namespace TodoList
 {
@@ -68,17 +63,13 @@ namespace TodoList
                     }
                     Console.WriteLine();
                 }
-                catch (ResourceNotFoundException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine();
-                }
-                catch (DatabaseException e)
-                {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Erro: " + e.Message);
                     Console.WriteLine();
                 }
             }
+            Console.WriteLine("Obrigado por utilizar minha TodoList!! =)");
         }
 
         static void PrintTasks(List<TaskDto> tasks)
@@ -105,8 +96,9 @@ namespace TodoList
             Importance importance = Enum.Parse<Importance>(Console.ReadLine());
             Console.Write("Prazo (dd/mm/yyyy):");
             DateTime date = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
             return new(title, description, importance, date, Status.Pendente);
         }
+
+
     }
 }
