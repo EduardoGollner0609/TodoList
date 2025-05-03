@@ -81,6 +81,7 @@ namespace TodoList
             }
             foreach (TaskDto task in tasks)
             {
+                Console.WriteLine();
                 Console.WriteLine(task);
             }
         }
